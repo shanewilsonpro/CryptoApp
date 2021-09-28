@@ -3,18 +3,18 @@ import { View, Text, Image } from "react-native";
 import styles from "./styles";
 
 export interface PortfolioCoinProps {
-  portfolioCoin: {
+  marketCoin: {
     image: string;
     name: string;
     symbol: string;
-    amount: number;
+    valueChange24H: number;
     valueUSD: number;
   };
 }
 
-const PortfolioCoin = (props: PortfolioCoinProps) => {
+const MarketCoin = (props: PortfolioCoinProps) => {
   const {
-    portfolioCoin: { image, name, symbol, amount, valueUSD },
+    marketCoin: { image, name, symbol, valueChange24H, valueUSD },
   } = props;
   return (
     <View style={styles.root}>
@@ -28,12 +28,12 @@ const PortfolioCoin = (props: PortfolioCoinProps) => {
 
       <View style={{ alignItems: "flex-end" }}>
         <Text style={styles.value}>${valueUSD}</Text>
-        <Text style={styles.symbol}>
-          {symbol} {amount}
+        <Text style={{color: valueChange24H > 0 ? '#4bdb00' : "#f10000"}}>
+          {valueChange24H > 0 && '+'} {valueChange24H}
         </Text>
       </View>
     </View>
   );
 };
 
-export default PortfolioCoin;
+export default MarketCoin;
