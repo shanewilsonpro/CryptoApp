@@ -3,7 +3,13 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome, Entypo, AntDesign, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  Entypo,
+  AntDesign,
+  FontAwesome5,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -18,16 +24,14 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import {
-  RootStackParamList,
-  RootTabParamList,
-} from "../../types";
+import { RootStackParamList, RootTabParamList } from "../../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import HomeScreen from "../screens/HomeScreen";
 import PortfolioScreen from "../screens/PortfolioScreen";
 import MarketScreen from "../screens/MarketScreen";
 import RankingScreen from "../screens/RankingScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import CoinDetailsScreen from "../screens/CoinDetailsScreen";
 
 export default function Navigation({
   colorScheme,
@@ -57,6 +61,11 @@ function RootNavigator() {
         name="Root"
         component={BottomTabNavigator}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CoinDetails"
+        component={CoinDetailsScreen}
+        options={{ title: "Price Data" }}
       />
       <Stack.Screen
         name="NotFound"
@@ -92,7 +101,9 @@ function BottomTabNavigator() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Entypo name="home" size={30} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Entypo name="home" size={30} color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
@@ -101,7 +112,9 @@ function BottomTabNavigator() {
         options={{
           title: "Portfolio",
           headerShown: false,
-          tabBarIcon: ({ color }) => <AntDesign name="piechart" size={30} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="piechart" size={30} color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
@@ -110,7 +123,9 @@ function BottomTabNavigator() {
         options={{
           title: "Market",
           headerShown: false,
-          tabBarIcon: ({ color }) => <FontAwesome5 name="chart-line" size={30} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome5 name="chart-line" size={30} color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
@@ -119,7 +134,9 @@ function BottomTabNavigator() {
         options={{
           title: "Rankings",
           headerShown: false,
-          tabBarIcon: ({ color }) => <MaterialIcons name="leaderboard" size={30} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="leaderboard" size={30} color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
@@ -128,19 +145,11 @@ function BottomTabNavigator() {
         options={{
           title: "Profile",
           headerShown: false,
-          tabBarIcon: ({ color }) => <FontAwesome name="user" size={30} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name="user" size={30} color={color} />
+          ),
         }}
       />
     </BottomTab.Navigator>
   );
-}
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }
