@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { View, Text, Image, Pressable } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, Image, Pressable, ActivityIndicator } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { API, graphqlOperation } from "aws-amplify";
+import { getCoin, listPortfolioCoins } from "../../graphql/queries";
 import styles from "./styles";
 import PercentageChange from "../../components/PercentageChange";
 import CoinPriceGraph from "../../components/CoinPriceGraph";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import AppContext from "../../utilis/AppContext";
 
 const historyString = JSON.stringify([
   47222.9831719397, 47434.65047738381, 47607.369136516856, 47074.35527848516,
@@ -52,19 +55,55 @@ const historyString = JSON.stringify([
 ]);
 
 const CoinDetailsScreen = () => {
-  const [coin, setCoin] = useState({
-    id: "1",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    name: "Bitcoin",
-    symbol: "BTC",
-    valueChange24H: -1.12,
-    valueChange1D: 2.12,
-    valueChange7D: -1.12,
-    currentPrice: 56440,
-    amount: 2,
-  });
+  const [coin, setCoin] = useState(null);
+  const [portfolioCoin, setPortfolioCoin] = useState(null);
+
+  const { userId } = useContext(AppContext);
 
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const fetchCoinData = async () => {
+    if (!route.params?.id) {
+      return;
+    }
+    try {
+      const response = await API.graphql(
+        graphqlOperation(getCoin, { id: route.params.id })
+      );
+      setCoin(response.data.getCoin);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const fetchPortfolioCoinData = async () => {
+    if (!route.params?.id) {
+      return;
+    }
+    try {
+      const response = await API.graphql(
+        graphqlOperation(listPortfolioCoins, {
+          filter: {
+            and: {
+              coinId: { eq: route.params?.id },
+              userId: { eq: userId },
+            },
+          },
+        })
+      );
+      if (response.data.listPortfolioCoins.items.length > 0) {
+        setPortfolioCoin(response.data.listPortfolioCoins.items[0]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchCoinData();
+    fetchPortfolioCoinData();
+  }, []);
 
   const onBuy = () => {
     navigation.navigate("CoinExchange", { isBuy: true, coin });
@@ -73,6 +112,10 @@ const CoinDetailsScreen = () => {
   const onSell = () => {
     navigation.navigate("CoinExchange", { isBuy: false, coin });
   };
+
+  if (!coin) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <View style={styles.root}>
@@ -111,12 +154,15 @@ const CoinDetailsScreen = () => {
         </View>
       </View>
 
-      <CoinPriceGraph dataString={historyString} />
+      {coin.priceHistoryString && (
+        <CoinPriceGraph dataString={coin.priceHistoryString} />
+      )}
 
       <View style={styles.row}>
         <Text>Position</Text>
         <Text>
-          {coin.symbol} {coin.amount} (${coin.currentPrice * coin.amount})
+          {coin.symbol} {portfolioCoin?.amount || 0} ($
+          {coin.currentPrice * portfolioCoin?.amount || 0})
         </Text>
       </View>
 

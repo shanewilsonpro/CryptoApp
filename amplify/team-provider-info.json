@@ -20,7 +20,7 @@
       "function": {
         "cryptoapp6cfd66f9PostConfirmation": {
           "deploymentBucketName": "amplify-cryptoapp-dev-121026-deployment",
-          "s3Key": "amplify-builds/cryptoapp6cfd66f9PostConfirmation-55706973753355354749-build.zip"
+          "s3Key": "amplify-builds/cryptoapp6cfd66f9PostConfirmation-6e5a5a4863333259534f-build.zip"
         }
       }
     }
