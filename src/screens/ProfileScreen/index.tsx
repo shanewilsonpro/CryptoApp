@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Image, Pressable } from "react-native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+import { Auth } from "aws-amplify";
 import styles from "./styles";
 
 const image = require("../../../assets/images/Saly-16.png");
@@ -13,8 +15,16 @@ const ProfileScreen = () => {
     netWorth: 12312,
   });
 
-  const signOut = () => {
-    console.warn("Sign out");
+  const navigation = useNavigation();
+
+  const signOut = async () => {
+    await Auth.signOut();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Welcome" }],
+      })
+    );
   };
 
   return (
@@ -29,7 +39,7 @@ const ProfileScreen = () => {
           <Text style={styles.value}>${user.netWorth}</Text>
         </View>
       </View>
-      
+
       <Pressable onPress={signOut} style={{ marginTop: "auto" }}>
         <Text>Sign Out</Text>
       </Pressable>
