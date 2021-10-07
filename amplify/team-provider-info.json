@@ -21,6 +21,10 @@
         "cryptoapp6cfd66f9PostConfirmation": {
           "deploymentBucketName": "amplify-cryptoapp-dev-121026-deployment",
           "s3Key": "amplify-builds/cryptoapp6cfd66f9PostConfirmation-6e5a5a4863333259534f-build.zip"
+        },
+        "ExchangeCoins": {
+          "deploymentBucketName": "amplify-cryptoapp-dev-121026-deployment",
+          "s3Key": "amplify-builds/ExchangeCoins-75542f47525033433469-build.zip"
         }
       }
     }

@@ -11,6 +11,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { API, graphqlOperation } from 'aws-amplify';
+import { exchangeCoins } from '../../graphql/mutations';
 import styles from "./styles";
 
 const image = require("../../../assets/images/Saly-31.png");
@@ -27,6 +29,7 @@ const CoinExchangeScreen = () => {
 
   const isBuy = route?.params?.isBuy;
   const coin = route?.params?.coin;
+  const portfolioCoin = route?.params?.portfolioCoin;
 
   useEffect(() => {
     const amount = parseFloat(coinAmount);
@@ -48,18 +51,32 @@ const CoinExchangeScreen = () => {
     setCoinAmount((amount / coin?.currentPrice).toString());
   }, [coinUSDValue]);
 
-  const onPlaceOrder = () => {
+  const placeOrder = async () => {
+    try {
+      const response = await API.graphql(
+        graphqlOperation(
+          exchangeCoins, {}
+        )
+      )
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  const onPlaceOrder = async () => {
     if (isBuy && parseFloat(coinUSDValue) > maxUSD) {
       Alert.alert("Error", `Not enough USD coins. Max: ${maxUSD}`);
       return;
     }
-    if (!isBuy && parseFloat(coinAmount) > coin.amount) {
+    if (!isBuy && (!portfolioCoin || parseFloat(coinAmount) > portfolioCoin.amount)) {
       Alert.alert(
         "Error",
-        `Not enough ${coin.symbol} coins. Max: ${coin.amount}`
+        `Not enough ${coin.symbol} coins. Max: ${coin.amount || 0}`
       );
       return;
     }
+
+    placeOrder();
   };
 
   const onSellAll = () => {};

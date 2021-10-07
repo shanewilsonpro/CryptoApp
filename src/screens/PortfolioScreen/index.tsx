@@ -1,94 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, FlatList } from "react-native";
+import { API, graphql } from 'aws-amplify';
+
 import PortfolioCoin from "../../components/PortfolioCoin";
 import styles from "./styles";
 
 const image = require("../../../assets/images/Saly-10.png");
 
-const portfolioCoins = [
-  {
-    id: "1",
-    name: "Virtual Dollars",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "USD",
-    amount: 56.44,
-    valueUSD: 56440,
-  },
-  {
-    id: "2",
-    name: "Bitcoin",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "USD",
-    amount: 1.12,
-    valueUSD: 36440,
-  },
-  {
-    id: "3",
-    name: "Etherium",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "ETH",
-    amount: 30,
-    valueUSD: 30120,
-  },
-  {
-    id: "3",
-    name: "Etherium",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "ETH",
-    amount: 30,
-    valueUSD: 30120,
-  },
-  {
-    id: "3",
-    name: "Etherium",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "ETH",
-    amount: 30,
-    valueUSD: 30120,
-  },
-  {
-    id: "3",
-    name: "Etherium",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "ETH",
-    amount: 30,
-    valueUSD: 30120,
-  },
-  {
-    id: "3",
-    name: "Etherium",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "ETH",
-    amount: 30,
-    valueUSD: 30120,
-  },
-  {
-    id: "3",
-    name: "Etherium",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "ETH",
-    amount: 30,
-    valueUSD: 30120,
-  },
-  {
-    id: "3",
-    name: "Etherium",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "ETH",
-    amount: 30,
-    valueUSD: 30120,
-  },
-  {
-    id: "3",
-    name: "Etherium",
-    image: "https://g.foolcdn.com/art/companylogos/square/btc.png",
-    symbol: "ETH",
-    amount: 30,
-    valueUSD: 30120,
-  },
-];
-
 const PortfolioScreen = () => {
+  const [portfolioCoins, setPortfolioCoins] = useState([]);
+
   return (
     <View style={styles.root}>
       <FlatList
